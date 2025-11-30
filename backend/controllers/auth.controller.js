@@ -1,3 +1,4 @@
+import emailHandlers from "../emails/emailHandlers.js";
 import generateToken from "../libs/generateToken.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
@@ -27,9 +28,16 @@ export const signup = async (req, res) => {
 		})
 
 		if (newUser) {
+			const savedUser = await newUser.save();
 			generateToken(newUser._id, res);
-			await newUser.save();
-			return res.status(201).json(newUser);
+			res.status(201).json(savedUser);
+
+			try {
+				emailHandlers(fullName, email, process.env.CLIENT_URL)
+			} catch (error) {
+				console.log("Error in email sending (signup controller)", error.message)
+			}
+
 		} else {
 			res.status(400).json({ message: "Invalid user data" })
 		}
@@ -53,6 +61,7 @@ export const signin = async (req, res) => {
 		console.log("Error in signin Controller :", error.message)
 	}
 }
+
 export const logout = async (req, _) => {
 	res.cookies("token")
 }
