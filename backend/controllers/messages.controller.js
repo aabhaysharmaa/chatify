@@ -59,6 +59,9 @@ export const getAllContacts = async (req, res) => {
 export const sendMessage = async (req, res) => {
 	try {
 		const { text, image } = req.body;
+		if (!text && !image) {
+			return res.status(400).json({ message: "Text and image is required"})
+		}
 		const senderId = req.user._id;
 		const { id: receiverId } = req.params;
 		let uploadImage;
