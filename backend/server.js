@@ -7,11 +7,15 @@ import cookieParser from "cookie-parser";
 
 
 
+
 import connectDB from "./libs/connectDB.js";
 const PORT = process.env.PORT || 3000
-import auth from "./routes/auth.routes.js"
+import auth from "./routes/auth.routes.js";
 
-app.use(express.urlencoded({extended : true}));
+
+
+
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
