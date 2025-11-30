@@ -22,7 +22,6 @@ export const getMessagesById = async (req, res) => {
 		console.log("Error in getMessagesById : ", error.message)
 	}
 }
-
 export const getChatPartners = async (req, res) => {
 	try {
 		const currentUser = req.user._id;
@@ -43,8 +42,6 @@ export const getChatPartners = async (req, res) => {
 		res.status(500).json(error.message);
 	}
 }
-
-
 export const getAllContacts = async (req, res) => {
 	try {
 		const currentUser = req.user._id;
@@ -55,19 +52,22 @@ export const getAllContacts = async (req, res) => {
 	}
 }
 
-
 export const sendMessage = async (req, res) => {
 	try {
 		const { text, image } = req.body;
 		if (!text && !image) {
-			return res.status(400).json({ message: "Text and image is required"})
+			return res.status(400).json({ message: "Text and image is required" })
 		}
 		const senderId = req.user._id;
 		const { id: receiverId } = req.params;
+		if (senderId.equals(receiverId)) {
+			return res.status(400).json({ message: "Cannot send messages to yourself" })
+		}
 		let uploadImage;
 		if (image) {
 			uploadImage = await uploadToCloudinary(image)
 		}
+		
 		// upload base64 to cloudinary
 		const userMessages = new Message({
 			senderId,
