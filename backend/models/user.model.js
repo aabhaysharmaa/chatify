@@ -4,8 +4,11 @@ import mongoose from "mongoose";
 const userSchema = mongoose.Schema({
 	email: {
 		type: String,
-		required: true,
-		unique: true
+		required: [true, "Email is required"],
+		unique: true,
+		lowercase: true,
+		trim: true,
+		match: [/^\S+@\S+\.\S+$/, "Please use a valid email address"]
 	},
 	fullName: {
 		type: String,
@@ -14,7 +17,8 @@ const userSchema = mongoose.Schema({
 	password: {
 		type: String,
 		required: true,
-		minLength: [6, "Password must be at least 6 character long"]
+		minlength: [6, "Password must be at least 6 character long"],
+		select: false
 	},
 	profilePic: {
 		type: String,
