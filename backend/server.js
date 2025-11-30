@@ -6,12 +6,10 @@ import path from "path";
 import cookieParser from "cookie-parser";
 
 
-
-
 import connectDB from "./libs/connectDB.js";
 const PORT = process.env.PORT || 3000
-import auth from "./routes/auth.routes.js";
-
+import authRoutes from "./routes/auth.routes.js";
+import messageRoutes from "./routes/message.route.js"
 
 
 
@@ -21,9 +19,8 @@ app.use(cookieParser());
 
 
 //routes
-
-app.use("/api/v1/auth", auth);
-// app.use("api/v1/messages");
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/messages", messageRoutes);
 
 const __dirname = path.resolve(); // current file absolute location
 

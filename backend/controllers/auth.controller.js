@@ -3,6 +3,7 @@ import cloudinary from "../libs/cloudinary.js";
 import generateToken from "../libs/generateToken.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
+
 export const signup = async (req, res) => {
 	try {
 		const { fullName, email, password } = req.body;
@@ -46,27 +47,30 @@ export const signup = async (req, res) => {
 		console.log("Error in signin controller : ", error.message);
 		res.status(500).json({ message: error.message })
 	}
-
 }
+
 export const login = async (req, res) => {
 	try {
 		const { email, password } = req.body;
-		if (!email | !password) {
-			return res.status(400).json({ message: "All field is required" })
+		if (!email || !password) {
+			return res.status(400).json({ message: "All field are required" })
 		}
-		const user = await User.findOne({ email })
+		const user = await User.findOne({ email: email.trim().toLowerCase() });
 		if (!user) {
 			return res.status(400).json({ message: "Invalid Credentials" })
 		}
+		if (!user.password) {
+			return res.status(400).json({ message: "User password not found" });
+		}
+
 		const isPasswordCorrect = await bcrypt.compare(password, user.password);
 		if (!isPasswordCorrect) {
 			return res.status(400).json({ message: "Invalid Credentials" })
 		}
 		generateToken(user._id, res);
-		user.password = undefined;
 		res.status(200).json({ user: user, message: "Login SuccessFull" })
 	} catch (error) {
-		console.log("Error in signin Controller :", error.message)
+		console.log("Error in login Controller :", error.message)
 	}
 }
 export const logout = async (_, res) => {
@@ -84,6 +88,6 @@ export const updateProfile = async () => {
 		return res.status(201).json(updatedUser);
 	} catch (error) {
 		console.log("Error in update profile :", error);
-		res.status(500).json({ message: "Internal server Error"}); 
+		res.status(500).json({ message: "Internal server Error" });
 	}
 }

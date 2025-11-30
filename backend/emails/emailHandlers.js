@@ -13,7 +13,7 @@ const emailHandlers = async (name, email, clientURL) => {
 	})
 
 	if (error) {
-		cons.error("Error sending welcome email : ", error);
+		console.error("Error sending welcome email : ", error);
 		throw new Error("Failed to send Email");
 	} else{
 	console.log("Welcome Email send Successfully", data)
