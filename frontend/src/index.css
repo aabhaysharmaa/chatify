@@ -1,6 +1,92 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-:root {
-	color : white 
+/* THIS MAKES --border-angle ANIMATABLE */
+@property --border-angle {
+  inherits: false;
+  initial-value: 0deg;
+  syntax: "<angle>";
+}
+
+
+.input {
+  @apply w-full bg-slate-800/50 border border-slate-700 rounded-lg py-2 pl-10 pr-4 text-slate-200 placeholder-slate-400 focus:ring-2 focus:ring-cyan-500 focus:border-transparent;
+}
+
+.auth-input-icon {
+  @apply absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 size-5;
+}
+
+.auth-input-label {
+  @apply block text-sm font-medium text-slate-300 mb-2;
+}
+
+.auth-badge {
+  @apply inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-cyan-500/20 text-cyan-300/70;
+}
+
+.auth-btn {
+  @apply w-full bg-cyan-500 text-white rounded-lg py-2.5 font-medium cursor-pointer
+  hover:bg-cyan-600 focus:ring-2 focus:ring-cyan-500;
+}
+
+.auth-link {
+  @apply px-4 py-2 inline-block bg-cyan-500/10 rounded-lg text-cyan-400
+  hover:text-cyan-500 text-sm transition-colors;
+}
+
+
+/* ANIMATION */
+@keyframes border-spin {
+  from {
+    --border-angle: 0deg;
+  }
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+/* MAIN CONTAINER */
+.border-animated {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+
+  border-radius: 16px;
+  border: 1px solid transparent;
+
+  background:
+    linear-gradient(
+      45deg,
+      #172033,
+      #1e293b 50%,
+      #172033
+    ) padding-box,
+
+    conic-gradient(
+      from var(--border-angle),
+      rgba(100, 116, 139, 0.48) 80%,
+      #06b6d4 86%,
+      #67e8f9 90%,
+      #06b6d4 94%,
+      rgba(100, 116, 139, 0.48)
+    ) border-box;
+
+  animation: border-spin 4s linear infinite;
+  padding: 2px;
+}
+
+/* OPTIONAL INNER STYLING (LOOKS BETTER) */
+.border-animated > * {
+  width: 100%;
+  height: 100%;
+  background: #0f172a;
+  border-radius: 14px;
+  background: linear-gradient(45deg, #172033, #1e293b 50%, #172033);
+  color: white; /* Optional: ensures text is readable */
+  min-height: 100vh;
+  margin: 0;
+
+
 }

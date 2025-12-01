@@ -4,7 +4,7 @@ import { config } from "dotenv";
 config();
 import path from "path";
 import cookieParser from "cookie-parser";
-
+import cors from "cors";
 
 import connectDB from "./libs/connectDB.js";
 const PORT = process.env.PORT || 3000
@@ -16,7 +16,10 @@ import messageRoutes from "./routes/message.route.js"
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-
+app.use(cors({
+	origin: "http://localhost:5173",
+	credentials: true
+}))
 
 //routes
 app.use("/api/v1/auth", authRoutes);
