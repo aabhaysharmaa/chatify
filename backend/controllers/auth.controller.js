@@ -78,7 +78,7 @@ export const logout = async (_, res) => {
 	res.status(200).json({ message: "User logged Out SuccessFully" })
 }
 
-export const updateProfile = async () => {
+export const updateProfile = async (req,res) => {
 	try {
 		const { profilePic } = req.body;
 		if (!profilePic) return res.status(400).json({ message: "Profile pic is required" })

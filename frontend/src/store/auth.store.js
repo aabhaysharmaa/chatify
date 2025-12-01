@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 const useAuthStore = create((set) => ({
 	authUser: null,
 	isCheckingAuth: false,
+	isUpdatingProfilePic : false,
 	checkAuth: async () => {
 		try {
 			set({ isCheckingAuth: true });
@@ -21,6 +22,7 @@ const useAuthStore = create((set) => ({
 	},
 	isSigningUp: false,
 	isLoggingIn: false,
+	isUpdatingProfile: false,
 	signUp: async (data) => {
 		try {
 			set({ isSigningUp: true })
@@ -50,14 +52,27 @@ const useAuthStore = create((set) => ({
 			set({ isLoggingIn: false })
 		}
 	},
-	logOut: async () => {
+	logout: async () => {
 		try {
 			await axiosInstance.post("/auth/logout");
 			set({ authUser: null })
-			toast.error("LogOut");
+			toast.success("Logout");
 		} catch (error) {
 			console.log("Error in checkAuth : ", error.response.data.message)
 			toast.error("Something went Wrong!")
+		}
+	},
+	updateProfile: async (image) => {
+		try {
+			set({ isUpdatingProfilePic: true })
+			const res = await axiosInstance.put("/auth/update-profile", image)
+			set({ authUser: res.data })
+			toast.success("Profile Updated Successfully")
+		} catch (error) {
+			console.log("Error in checkAuth : ", error.response.data.message)
+			toast.error("Something went Wrong!")
+		} finally {
+			set({ isUpdatingProfilePic: false })
 		}
 	}
 }));

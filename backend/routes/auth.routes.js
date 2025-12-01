@@ -3,7 +3,7 @@ import { login, logout, signup, updateProfile } from "../controllers/auth.contro
 import Protected from "../middlewares/protected.js";
 import { arcjetProtection } from "../middlewares/arcjet.middleware.js";
 const router = express.Router();
-router.use(arcjetProtection);
+// router.use(arcjetProtection);
 
 router.post("/login", login);
 router.post("/signup", signup);
@@ -15,4 +15,5 @@ router.get("/check", arcjetProtection, Protected, (req, res) => res.status(200).
 
 
 
-export default router; 
+export default router;
+// 692d921b124296aa85874598 // us 

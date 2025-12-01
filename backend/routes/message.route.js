@@ -5,7 +5,7 @@ import { arcjetProtection } from "../middlewares/arcjet.middleware.js";
 
 const router = express.Router();
 
-router.use(arcjetProtection, Protected) 
+router.use( Protected)
 
 router.get("/contacts", Protected, getAllContacts)
 router.get("/chats", getChatPartners);
