@@ -50,7 +50,6 @@
 .border-animated {
   width: 100%;
   height: 100%;
-  display: flex;
   overflow: hidden;
 
   border-radius: 16px;
@@ -78,9 +77,7 @@
 }
 
 /* OPTIONAL INNER STYLING (LOOKS BETTER) */
-.border-animated > * {
-  width: 100%;
-  height: 100%;
+.border-animated > * { 
   background: #0f172a;
   border-radius: 14px;
   background: linear-gradient(45deg, #172033, #1e293b 50%, #172033);

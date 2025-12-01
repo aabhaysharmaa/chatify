@@ -13,7 +13,7 @@ const useAuthStore = create((set) => ({
 		} catch (error) {
 			console.log("Error in checkAuth : ", error.response.data.message)
 			set({ authUser: null })
-			toast.error(error.response.data.message || "Something went Wrong!")
+			toast.error("Something went Wrong!")
 		} finally {
 			set({ isCheckingAuth: false })
 		}
@@ -45,7 +45,7 @@ const useAuthStore = create((set) => ({
 		} catch (error) {
 			console.log("Error in checkAuth : ", error.response.data.message)
 			set({ authUser: null })
-			toast.error(error.response.data.message || "Something went Wrong!")
+			toast.error("Something went Wrong!")
 		} finally {
 			set({ isLoggingIn: false })
 		}
@@ -53,31 +53,14 @@ const useAuthStore = create((set) => ({
 	logOut: async () => {
 		try {
 			await axiosInstance.post("/auth/logout");
-			set({authUser : null})
+			set({ authUser: null })
 			toast.error("LogOut");
 		} catch (error) {
 			console.log("Error in checkAuth : ", error.response.data.message)
-			toast.error(error.response.data.message || "Something went Wrong!")
+			toast.error("Something went Wrong!")
 		}
 	}
 }));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
