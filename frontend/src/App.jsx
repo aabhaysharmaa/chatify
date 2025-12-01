@@ -6,9 +6,10 @@ import SignUpPage from './pages/SignUpPage';
 import Loader from './components/Loader';
 
 import useAuthStore from "./store/auth.store.js"
+import { Toaster } from 'react-hot-toast';
 
 const App = () => {
-  const {  isCheckingAuth, checkAuth  , authUser} = useAuthStore();
+  const {  isCheckingAuth , checkAuth  , authUser} = useAuthStore();
 
   useEffect(() => {
     checkAuth()
@@ -19,6 +20,8 @@ const App = () => {
     return <Loader />
   }
   return (
+    <>
+    <Toaster/>
     <div className="min-h-screen bg-slate-900 relative flex items-center justify-center p-4 overflow-hidden">
       {/* DECORATORS - GRID BG & GLOW SHAPES */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-size-[14px_24px]" />
@@ -29,8 +32,8 @@ const App = () => {
         <Route path='/signup' element={!authUser ? < SignUpPage /> : <Navigate to={"/"} />} />
         <Route path='/login' element={!authUser ? < LoginPage /> : <Navigate to={"/"} />} />
       </Routes>
-
     </div>
+    </>
   )
 }
 

@@ -39,6 +39,8 @@ const useAuthStore = create((set) => ({
 		try {
 			set({ isLoggingIn: true })
 			const res = await axiosInstance.post("/auth/login", data)
+			toast.success("success")
+
 			set({ authUser: res.data })
 		} catch (error) {
 			console.log("Error in checkAuth : ", error.response.data.message)
@@ -47,7 +49,36 @@ const useAuthStore = create((set) => ({
 		} finally {
 			set({ isLoggingIn: false })
 		}
+	},
+	logOut: async () => {
+		try {
+			await axiosInstance.post("/auth/logout");
+			set({authUser : null})
+			toast.error("LogOut");
+		} catch (error) {
+			console.log("Error in checkAuth : ", error.response.data.message)
+			toast.error(error.response.data.message || "Something went Wrong!")
+		}
 	}
-}))
+}));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export default useAuthStore;

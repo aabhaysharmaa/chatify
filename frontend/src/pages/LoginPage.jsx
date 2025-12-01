@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Loader from '../components/Loader'
 import useAuthStore from '../store/auth.store';
 import BorderAnimatedContainer from '../components/BorderAnimatedContainer';
-import { Loader2, LoaderIcon, LockIcon, MailIcon, MessageCircleIcon } from 'lucide-react';
+import { LoaderIcon, LockIcon, MailIcon, MessageCircleIcon } from 'lucide-react';
 import { Link } from 'react-router';
 
 
@@ -16,12 +16,15 @@ const LoginPage = () => {
     e.preventDefault();
     logIn(formData);
     setFormData({
-      fullName: "",
       email: "",
       password: ""
     })
   }
 
+
+  if (isLoggingIn) {
+    return <Loader />;
+  }
   return (
     <div className="w-full flex items-center justify-center p-4 bg-slate-900">
       <div className="relative w-full max-w-6xl md:h-[800px] h-[650px]">
