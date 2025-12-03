@@ -16,10 +16,13 @@ const Contacts = () => {
         <div className="flex items-center mt-4 p-3">
           <div className="avatar avatar-online">
             <div className="size-12 rounded-full">
-              <img src={contact.profilePic || "/avatar.png"} alt="contactsProfilePic" />
+              <img src={contact?.profilePic || "/avatar.png"} alt="contactsProfilePic" />
             </div>
           </div>
-          <h4>{allContacts.fullName}</h4>
+          <div className="flex flex-col ml-1 items-center justify-center">
+            <h3 className='font-normal text-slate-200'>{contact?.fullName}</h3>
+            <span className='text-sm text-slate-400'>online</span>
+          </div>
         </div>
       </div>
     ))}</div>
