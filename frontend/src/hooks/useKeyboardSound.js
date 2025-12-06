@@ -8,7 +8,7 @@ const keyStocksSounds = [
 function useKeyboardSound() {
   const playRandomStrokeSound = () => {
     const randomSound =
-      keyStocksSounds[Math.floor(Math.random() * keyStocksSounds.length)];
+      keyStocksSounds[Math.floor(Math.random() * keyStocksSounds.length)]; 
 
     randomSound.currentTime = 0;
 

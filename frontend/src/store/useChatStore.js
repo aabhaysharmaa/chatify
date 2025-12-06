@@ -57,46 +57,71 @@ const useChatStore = create((set, get) => ({
 			set({ isMessagesLoading: false })
 		}
 	},
-	sendMessage: async (messageData) => {
-		const { selectedUser, messages } = get();
-		const { authUser } = useAuthStore.getState();
-		// 1. Create optimistic message (fake, for UI only)
-		const tempId = Date.now().toString()
 
-		const optimisticMessage = {
-			_id: tempId,
-			tempId,
-			senderId: authUser.user._id,
-			receiverId: selectedUser._id,
-			text: messageData.text,
-			createdAt: new Date().toISOString(),
-			optimistic: true
-		};
-		// // 2. SHOW MESSAGE IN UI INSTANTLY
-		set({ messages: [...messages, optimisticMessage] });
-		try {
-			const res = await axiosInstance.post(
-				`/messages/send/${selectedUser._id}`,
-				messageData
-			);
+sendMessage: async (messageData) => {
+    const { selectedUser } = get();
+    const { authUser } = useAuthStore.getState();
 
-			// 3. Replace optimistic message with real one
-			set((state) => ({
-				messages: state.messages.map(msg =>
-					msg.optimistic ? res.data : msg
-				)
-			}));
-		} catch (error) {
-			console.error(error);
-			set({ messages: messages })
-			toast.error("Message failed to send");
+    if (!selectedUser?._id || !authUser?.user?._id) return;
 
-			// 4. Remove failed optimistic message
-			set((state) => ({
-				messages: state.messages.filter(m => !m.optimistic)
-			}));
-		}
-	}
+    const tempId = `temp-${Date.now()}`;
+
+    const optimisticMessage = {
+        _id: tempId,
+        senderId: String(authUser?.user?._id),
+        receiverId: String(selectedUser._id),
+        text: messageData.text,
+        createdAt: new Date().toISOString(),
+        optimistic: true,
+    };
+
+    // Add optimistic UI
+    set((state) => ({
+        messages: [...(state.messages || []), optimisticMessage]
+    }));
+
+    // ✅ FIX: SEND SOCKET EVENT (this was missing)
+    useAuthStore.getState().socket?.emit("sendMessage", {
+        receiverId: selectedUser._id,
+        message: messageData.text,
+        tempId,
+    });
+
+    try {
+        // Save to DB too
+        const res = await axiosInstance.post(
+            `/messages/send/${selectedUser._id}`,
+            { ...messageData, tempId }
+        );
+
+        const payload = res.data;
+        const realMessage = payload?.userMessages ? payload.userMessages : payload;
+        const returnedTempId = payload?.tempId;
+
+        if (realMessage && realMessage._id) {
+            realMessage.senderId = String(realMessage.senderId);
+            realMessage.receiverId = String(realMessage.receiverId);
+        }
+
+        // Replace optimistic
+        set((state) => ({
+            messages: (state.messages || []).map(msg =>
+                (msg._id === (returnedTempId || tempId)) ? realMessage : msg
+            )
+        }));
+
+    } catch (error) {
+        console.error(error);
+        toast.error("Message failed to send");
+
+        // Remove optimistic on error
+        set((state) => ({
+            messages: (state.messages || []).filter(msg => msg._id !== tempId)
+        }));
+    }
+}
+
+
 
 }));
 

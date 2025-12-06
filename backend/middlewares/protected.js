@@ -10,7 +10,6 @@ const Protected = async (req, res, next) => {
 		if (!decode) {
 			return res.status(400).json({ message: "Unauthorized - invalid token" })
 		}
-		console.log(decode)
 		const user = await User.findById(decode.userId)
 		if (!user) {
 			return res.status(400).json({ message: "No User founded" })
